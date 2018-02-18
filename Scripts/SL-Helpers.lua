@@ -172,7 +172,7 @@ function GetPlayerOptionsLineNames()
 	if SL.Global.GameMode == "Casual" then
 		return "SpeedMod,BackgroundFilter,MusicRate,Difficulty,ScreenAfterPlayerOptions"
 	else
-		return "SpeedModType,SpeedMod,Mini,Perspective,NoteSkin2,Judgment,BackgroundFilter,MusicRate,Difficulty,ScreenAfterPlayerOptions"
+		return "SpeedModType,SpeedMod,Mini,Assist,Perspective,NoteSkin2,Judgment,BackgroundFilter,MusicRate,Difficulty,ScreenAfterPlayerOptions"
 	end
 end
 
