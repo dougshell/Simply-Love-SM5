@@ -1,7 +1,9 @@
-# Simply Love (StepMania 5)
+﻿# Simply Love (StepMania 5)
 
 ![Arrow Logo](http://i.imgur.com/FyeguCQ.png)
 ======================
+
+(Local fork for DougShell/Confuzled. These changes do not reflect the decisions or input of Dguzek/Dbk2)
 
 This is a recreation of hurtpiggypig's Simply Love SM3.95 theme made to now run in StepMania 5.
 
