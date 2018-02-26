@@ -16,7 +16,7 @@ end
 
 return LoadFont("_miso")..{
 	Text=stepartist,
-	InitCommand=cmd(zoom, 0.7; xy, 115,_screen.cy-80; maxwidth,170 ),
+	InitCommand=cmd(zoom, 0.7; xy, 115,_screen.cy-80 ),
 	OnCommand=function(self)
 		if player == PLAYER_1 then
 			self:x( self:GetX() * -1 )
@@ -24,16 +24,5 @@ return LoadFont("_miso")..{
 		else
 			self:horizalign(right)
 		end
-		self:queuecommand('Marquee')
-	end,
-	MarqueeCommand=function(self)
-		self:diffusealpha(1)
-		self:sleep(2)
-		self:diffusealpha(0)
-		self:sleep(4)
-		self:queuecommand('Marquee')
-	end,
-	OffCommand=function(self)
-		self:stoptweening()
 	end
 }
