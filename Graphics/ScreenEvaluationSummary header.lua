@@ -15,5 +15,13 @@ return Def.ActorFrame{
 			self:sleep(0.1):decelerate(0.33):diffusealpha(1)
 				:settext(THEME:GetString("ScreenSelectPlayMode", SL.Global.GameMode))
 		end,
-	}
+	},
+	LoadFont("_wendy small") .. {
+	InitCommand=cmd(zoom,WideScale(0.4, 0.5); xy, _screen.cx, SCREEN_BOTTOM-15; horizalign,center; diffusealpha,0; queuecommand,"TextSet"),
+	TextSetCommand=function(self)
+				self:settext( string.format('%s %02i %04i', MonthToString(MonthOfYear()), DayOfMonth(), Year()) )
+	end,
+	OnCommand=cmd(decelerate,0.5; diffusealpha,1),
+	OffCommand=cmd(accelerate,0.5;diffusealpha,0)
+},
 }
