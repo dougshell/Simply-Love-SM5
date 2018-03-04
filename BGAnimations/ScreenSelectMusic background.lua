@@ -11,6 +11,17 @@ if ThemePrefs.Get("RainbowMode") then
 				:sleep(0.6):linear(0.5):diffusealpha(0)
 		end
 	}
+else
+	t[#t+1] = Def.Quad{
+		InitCommand=function(self) self:FullScreen():Center() end
+	}
+	t[#t+1] = LoadActor( THEME:GetPathB("", "_shared background normal"))
+	t[#t+1] = Def.Quad{
+		InitCommand=function(self)
+			self:diffuse(Color.Black):Center():FullScreen()
+				:sleep(0.6):linear(0.5):diffusealpha(0)
+		end
+	}
 end
 
 return t
