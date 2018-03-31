@@ -5,15 +5,11 @@ function PlayerColor( pn )
 end
 
 function GetHexColor( n )
-	if SL.Colors[n] then
-		return color(SL.Colors[n])
-
-	-- if passed an index that returns nil, wrap the index using modulus
-	elseif SL.Colors[(n % #SL.Colors) + 1] then
-		return color( SL.Colors[(n % #SL.Colors) + 1] )
-
+	local clr = ((n - 1) % #SL.Colors) + 1
+	if SL.Colors[clr] then
+		return color(SL.Colors[clr])
 	end
-
+	
 	-- if we were passed nil or a non-integer, return white
 	return Color.White
 end
@@ -49,7 +45,6 @@ function DifficultyIndexColor( i )
 end
 
 function ColorRGB ( n )
-	local clr = n + SL.Global.ActiveColorIndex + #SL.Colors - 1
-	clr = (clr % #SL.Colors) + 1
+	local clr = n + SL.Global.ActiveColorIndex
 	return GetHexColor(clr)
 end
