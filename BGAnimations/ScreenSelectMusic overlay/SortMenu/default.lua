@@ -15,7 +15,6 @@ local t = Def.ActorFrame {
 			:draworder(1)
 	end,
 	ShowSortMenuCommand=function(self)
-		SOUND:StopMusic()
 		SCREENMAN:GetTopScreen():AddInputCallback(input)
 
 		for player in ivalues(GAMESTATE:GetHumanPlayers()) do
