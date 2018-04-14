@@ -4,7 +4,7 @@ local af = Def.ActorFrame{}
 
 af[#af+1] = Def.Quad{
 	InitCommand=function(self)
-		self:diffuse(Color.Black):diffusealpha(0.95)
+		self:diffuse(Color.Black):diffusealpha(0.25)
 			:zoomto(_screen.w/2,_screen.h)
 
 		if (PREFSMAN:GetPreference("Center1Player") and IsUsingWideScreen()) then
