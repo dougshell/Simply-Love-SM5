@@ -15,7 +15,6 @@ function GetHexColor( n )
 end
 
 
-
 function GetCurrentColor()
 	return GetHexColor( SL.Global.ActiveColorIndex )
 end
@@ -45,11 +44,7 @@ function DifficultyIndexColor( i )
 	return GetHexColor(clr)
 end
 
-<<<<<<< HEAD
 function ColorRGB ( n )
-=======
-function ColorRGB( n )
->>>>>>> 00fdf7112b0050d229679c39d777dfca5f0bb11a
 	local clr = n + SL.Global.ActiveColorIndex
 	return GetHexColor(clr)
 end
