@@ -66,7 +66,7 @@ local SL_CustomPrefs =
 	},
 	VisualTheme =
 	{
-		Default = "Hearts",
+		Default = "Arrows",
 		Choices = { "Hearts", "Arrows" },
 	},
 	RainbowMode = {
