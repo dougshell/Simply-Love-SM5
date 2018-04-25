@@ -75,7 +75,7 @@ local SL_CustomPrefs =
 		Values 	= { true , false }
 	},
 	VerboseSongFolder = {
-	Default = false,
+	Default = true,
 	Choices = { "Yes", "No" },
 	Values 	= { true , false }
 	},
