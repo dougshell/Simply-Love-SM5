@@ -6,16 +6,16 @@ local GCM = GAMESTATE:GetCoinMode()
 
 local MovePageOn = {
 	['Global'] = {
-		['MenuLeft'] = 1,
-		['MenuUp'] = 1,
-		['MenuRight'] = -1,
-		['MenuDown'] = -1, 
+		['MenuRight'] = 1,
+		['MenuDown'] = 1,
+		['MenuLeft'] = -1,
+		['MenuUp'] = -1, 
 	},
 	['CoinMode_Home'] = {
-		['Left'] = 1,
-		['Up'] = 1,
-		['Right'] = -1,
-		['Down'] = -1, 
+		['Right'] = 1,
+		['Down'] = 1,
+		['Left'] = -1,
+		['Up'] = -1, 
 	},
 }
 
