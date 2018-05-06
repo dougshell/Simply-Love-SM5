@@ -64,6 +64,12 @@ local SL_CustomPrefs =
 		Choices = { "Show", "Hide "},
 		Values = { true, false }
 	},
+	GlowingGrades =
+	{
+		Default = false,
+		Choices = { "On", "Off "},
+		Values = { true, false }
+	},
 	VisualTheme =
 	{
 		Default = "Arrows",
