@@ -1,5 +1,8 @@
+
 local pss = ...
 local t = Def.ActorFrame{}
+local isECFA = (SL.Global.GameMode == "ECFA")
+local FCcolor = "#FFFFFF"
 
 t[#t+1] = LoadActor("graphics/star.png")..{
 	OnCommand=function(self)
@@ -10,6 +13,40 @@ t[#t+1] = LoadActor("graphics/star.png")..{
 				pss:GetTapNoteScores('TapNoteScore_W2') == 1 then
 			self:sleep(2)
 			self:queuecommand('Animate')
+		else
+			if pss:GetHoldNoteScores('HoldNoteScore_LetGo') == 0 and
+				pss:GetTapNoteScores('TapNoteScore_Miss') == 0 and
+				pss:GetTapNoteScores('TapNoteScore_W5') == 0 then
+				if pss:GetTapNoteScores('TapNoteScore_W4') > 0 then
+					if isECFA then
+						FCcolor = "#94FEC1" -- ECFA FGC
+					end
+				else
+					-- pss:GetTapNoteScores('TapNoteScore_W4') == 0
+					if pss:GetTapNoteScores('TapNoteScore_W3') > 0 then
+						if isECFA then
+							FCcolor = "#FDDB85" -- ECFA FEC
+						else
+							FCcolor = "#94FEC1" -- FGC
+						end
+					else
+						-- pss:GetTapNoteScores('TapNoteScore_W3') == 0
+						if pss:GetTapNoteScores('TapNoteScore_W2') > 1 then
+							if isECFA then
+								FCcolor = "#6BF0FF" -- ECFA FFC
+							else
+								FCcolor = "#FDDB85" -- FEC
+							end
+						else
+							-- pss:GetTapNoteScores('TapNoteScore_W2') == 0
+							FCcolor = "#6BF0FF" -- general FFC
+						end
+					end
+				end
+			end
+			self:diffuseshift():effectperiod(1.5)
+			self:effectcolor1( color("#FFFFFF") )
+			self:effectcolor2( color(FCcolor) )
 		end
 	end,
 	AnimateCommand=function(self)
@@ -25,7 +62,9 @@ t[#t+1] = LoadActor("graphics/star.png")..{
 				pss:GetTapNoteScores('TapNoteScore_W5') == 0 and
 				pss:GetTapNoteScores('TapNoteScore_W4') == 0 and
 				pss:GetTapNoteScores('TapNoteScore_W3') == 0 and
-				pss:GetTapNoteScores('TapNoteScore_W2') == 1 then
+				pss:GetTapNoteScores('TapNoteScore_W2') == 1 and
+				pss:GetHoldNoteScores('HoldNoteScore_LetGo') == 0 and
+				pss:GetTapNoteScores('TapNoteScore_HitMine') == 0 then
 			self:sleep(9)
 			self:queuecommand('Appear')
 		end
