@@ -46,7 +46,7 @@ if SL.Global.GameMode ~= "StomperZ" then
 				self:x( self:GetX() * -1 )
 			end
 			
-			if FCcolor ~= nil then
+			if FCcolor ~= nil and ThemePrefs.Get("GlowingGrades") then
 				self:diffuseshift():effectperiod(1.5)
 				self:effectcolor1( color("#FFFFFF") )
 				self:effectcolor2( FCcolor )

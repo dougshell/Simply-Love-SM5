@@ -44,9 +44,11 @@ t[#t+1] = LoadActor("graphics/star.png")..{
 					end
 				end
 			end
+			if FCcolor ~= nil and ThemePrefs.Get("GlowingGrades") then
 			self:diffuseshift():effectperiod(1.5)
 			self:effectcolor1( color("#FFFFFF") )
 			self:effectcolor2( color(FCcolor) )
+			end
 		end
 	end,
 	AnimateCommand=function(self)
