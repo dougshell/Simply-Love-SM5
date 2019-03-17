@@ -156,7 +156,13 @@ function SetGameModePreferences()
 end
 
 function GetOperatorMenuLineNames()
-	local lines = "System,KeyConfig,TestInput,Visual,GraphicsSound,Arcade,Input,Theme,MenuTimer,CustomSongs,Advanced,Profiles,Acknowledgments,Reload"
+	local lines = "System,KeyConfig,TestInput,Visual,GraphicsSound,Arcade,Input,Theme,MenuTimer,CustomSongs,Advanced,Profiles,Acknowledgments,ClearCredits,Reload"
+
+	-- hide the OptionRow for ClearCredits if we're not in CoinMode_Pay; it doesn't make sense to show for at-home players
+	-- note that (EventMode + CoinMode_Pay) will actually place you in CoinMode_Home
+	if GAMESTATE:GetCoinMode() ~= "CoinMode_Pay" then
+		lines = lines:gsub("ClearCredits,", "")
+	end
 
 	-- CustomSongs preferences don't exist in 5.0.x, which many players may still be using
 	-- thus, if the preference for CustomSongsEnable isn't found in this version of SM, don't let players
@@ -186,7 +192,7 @@ function GetPlayerOptionsLineNames()
 end
 
 function GetPlayerOptions2LineNames()
-	local mods = "Turn,Scroll,7,8,9,10,11,12,13,Attacks,Hide,ReceptorArrowsPosition,LifeMeterType,TargetStatus,TargetBar,GameplayExtras,MeasureCounterPosition,MeasureCounter,DecentsWayOffs,Vocalization,ScreenAfterPlayerOptions2"
+	local mods = "Turn,Scroll,7,8,9,10,11,12,13,Attacks,Hide,ReceptorArrowsPosition,LifeMeterType,TargetStatus,TargetBar,ActionOnMissedTarget,GameplayExtras,MeasureCounterPosition,MeasureCounter,DecentsWayOffs,Vocalization,ScreenAfterPlayerOptions2"
 
 	-- remove ReceptorArrowsPosition if GameMode isn't StomperZ
 	if SL.Global.GameMode ~= "StomperZ" then
@@ -200,14 +206,106 @@ function GetPlayerOptions2LineNames()
 
 	-- remove TargetStatus and TargetBar (IIDX pacemaker) if style is double
 	if SL.Global.Gamestate.Style == "double" then
-		mods = mods:gsub("TargetStatus,TargetBar,", "")
+		mods = mods:gsub("TargetStatus,TargetBar,ActionOnMissedTarget,", "")
+	end
+
+	-- only show if the user is in event mode
+	-- no need to have this show up in arcades.
+	-- the pref is also checked against EventMode during runtime.
+	if not PREFSMAN:GetPreference("EventMode") then
+		mods = mods:gsub("ActionOnMissedTarget,", "")
 	end
 
 	return mods
+end
+
+GetStepsCredit = function(player)
+	local t = {}
+
+	if GAMESTATE:IsCourseMode() then
+		local course = GAMESTATE:GetCurrentCourse()
+		-- scripter
+		if course:GetScripter() ~= "" then t[#t+1] = course:GetScripter() end
+		-- description
+		if course:GetDescription() ~= "" then t[#t+1] = course:GetDescription() end
+	else
+		local steps = GAMESTATE:GetCurrentSteps(player)
+		-- credit
+		if steps:GetAuthorCredit() ~= "" then t[#t+1] = steps:GetAuthorCredit() end
+		-- description
+		if steps:GetDescription() ~= "" then t[#t+1] = steps:GetDescription() end
+		-- chart name
+		if steps:GetChartName() ~= "" then t[#t+1] = steps:GetChartName() end
+	end
+
+	return t
 end
 
 BrighterOptionRows = function()
 	if ThemePrefs.Get("RainbowMode") then return true end
 	if PREFSMAN:GetPreference("EasterEggs") and MonthOfYear()==11 then return true end -- holiday cheer
 	return false
+end
+
+GetThemeVersion = function()
+	local file = IniFile.ReadFile( THEME:GetCurrentThemeDirectory() .. "ThemeInfo.ini" )
+	if file then
+		if file.ThemeInfo and file.ThemeInfo.Version then
+			return file.ThemeInfo.Version
+		end
+	end
+	return false
+end
+
+local function FilenameIsMultiFrameSprite(filename)
+	-- look for the "[frames wide] x [frames tall]"
+	-- and some sort of all-letters file extension
+	-- Lua doesn't support an end-of-string regex marker...
+	return string.match(filename, " %d+x%d+") and string.match(filename, "%.[A-Za-z]+")
+end
+
+local function StripSpriteHints(filename)
+	-- handle common cases here, gory details in /src/RageBitmapTexture.cpp
+	return filename:gsub(" %d+x%d+", ""):gsub(" %(doubleres%)", ""):gsub(".png", "")
+end
+
+function CleanString(filename)
+	-- do a couple text conversions to allow spaces and periods in display strings
+	-- without causing so much grief with SM loading
+	-- Suppose two images named "A" and "A B" are in the same folder
+	-- Attempting to load "A" will throw a nonsensical but harmless error
+	local name = filename:gsub("_", " ")
+	name = name:gsub("`", ".")
+
+	return name
+end
+
+function GetJudgmentGraphics(mode)
+	if mode == 'Casual' then mode = 'Competitive' end
+	local path = THEME:GetPathG('', '_judgments/' .. mode)
+	local files = FILEMAN:GetDirListing(path .. '/')
+	local judgment_graphics = {}
+
+	for k,filename in ipairs(files) do
+
+		-- Filter out files that aren't judgment graphics
+		-- e.g. hidden system files like .DS_Store
+		if FilenameIsMultiFrameSprite(filename) then
+
+			-- use regexp to get only the name of the graphic, stripping out the extension
+			local name = StripSpriteHints(filename)
+
+			-- Fill the table, special-casing Love so that it comes first.
+			if name == "Love" then
+				table.insert(judgment_graphics, 1, name)
+			else
+				judgment_graphics[#judgment_graphics+1] = name
+			end
+		end
+	end
+
+	-- "None" -> no graphic in Player judgment lua
+	judgment_graphics[#judgment_graphics+1] = "None"
+
+	return judgment_graphics
 end
